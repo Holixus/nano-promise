@@ -118,7 +118,7 @@ Pending.all = function (arr) {
 		else {
 			for (var i = 0, n = arr.length; i < n; ++i)
 				sub(i);
-			if (!n)
+			if (!n || !refs)
 				resolve(results);
 		}
 	});
@@ -130,12 +130,12 @@ Pending.race = function (arr) {
 			reject(TypeError('not array'));
 		else {
 			for (var i = 0, n = arr.length; i < n; ++i)
-				if (!thenable(p, function (v) {
+				if (!thenable(arr[i], function (v) {
 						resolve(v);
 					}, function (r) {
 						reject(r);
 					})) {
-					resolve(p);
+					resolve(arr[i]);
 					break;
 				}
 			if (!n)
