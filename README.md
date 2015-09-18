@@ -25,7 +25,7 @@ new Promise(function (resolve, reject) {
 * array {Array} - array of Promises or values
 
 ```js
-Promies.concat([
+Promise.concat([
 	new Promise(function (resolve, reject) {
 		resolve(1, 2, 3, 4);
 	},
