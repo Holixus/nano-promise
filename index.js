@@ -1,8 +1,24 @@
 module.exports = (function (onIdle, queue) {"use strict";
 
-function Arguments() {
-	for (var a = arguments, n = this.length = a.length, i = 0; i < n; ++i)
-		this[i] = a[i];
+function Arguments(a) {
+	if (a)
+		for (var n = this.length = a.length, i = 0; i < n; ++i)
+			this[i] = a[i];
+	else
+		this.length = 0;
+}
+
+Arguments.prototype = {
+	push: function (v) {
+		this[this.length++] = v;
+	},
+	concat: function (e) {
+		if (e instanceof Arguments)
+			for (var j = 0, m = e.length; j < m; ++j)
+				this.push(e[j]);
+		else
+			this.push(e);
+	}
 };
 
 function sched(defer, op, args) { // [pending.resolve, pending.reject, res, rej], op, arguments
@@ -112,8 +128,8 @@ Pending.all = function (arr) {
 
 		function sub(i) {
 			if (thenable(arr[i], function (v) {
-						results[i] = v;
-						if (--refs)
+						results[i] = arguments.length > 1 ? new Arguments(arguments): v;
+						if (!--refs)
 							resolve(results);
 					}, reject))
 				++refs;
@@ -121,7 +137,7 @@ Pending.all = function (arr) {
 				results[i] = arr[i]; // not a Promise
 		};
 
-		if (typeof arr !== 'object' || (!'length' in arr))
+		if (typeof arr !== 'object' || !('length' in arr))
 			reject(TypeError('not array'));
 		else {
 			for (var i = 0, n = arr.length; i < n; ++i)
@@ -157,6 +173,15 @@ Pending.reject = function () {
 };
 
 Pending.Arguments = Arguments;
+
+Pending.concat = function (arr) {
+	return Pending.all(arr).then(function (results) {
+			var out = new Arguments;
+			for (var i = 0, n = results.length; i < n; ++i)
+				out.concat(results[i]);
+			return out;
+		});
+};
 
 return Pending; // constructor of Promise in pending state
 })(process.nextTick, []);
