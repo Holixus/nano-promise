@@ -98,6 +98,13 @@ function Pending(executor) {
 		}
 }
 
+Pending.prototype = {
+	'catch': function (reject) {
+		return this.then(0, reject);
+	}
+};
+
+
 Pending.all = function (arr) {
 	return new Pending(function (resolve, reject) {
 		var refs = 0,
