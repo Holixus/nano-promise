@@ -11,9 +11,28 @@ var Promise = require('nanopromise');
 new Promise(function (resolve, reject) {
 	resolve(1, 2, 3, 4); // you can pass several arguments
 }).then(function (a, b, c, d) {
-	console.log(a, b, c, d);
-	return Promise.Arguments(5, 6, 7, 8); // and return
+	console.log(a, b, c, d); // 1 2 3 4
+	return new Promise.Arguments(5, 6, 7, 8); // and return
 }).then(function (a, b, c, d) {
-	console.log(a, b, c, d);
+	console.log(a, b, c, d); // 5 6 7 8
 });
 ````
+
+## Extensions
+
+### Promise.concat(array)
+
+* array {Array} - array of Promises or values
+
+```js
+Promies.concat([
+	new Promise(function (resolve, reject) {
+		resolve(1, 2, 3, 4);
+	},
+	new Promise(function (resolve, reject) {
+		resolve(4, 5, 6, 7);
+	}])
+	.then(function (a,b,c,d,e,f,g,h) {
+		console.log(a,b,c,d,e,f,g,h); // 1 2 3 4 5 6 7 8
+	});
+```
