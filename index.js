@@ -200,6 +200,7 @@ Pending.race = function (arr) {
 					promises[i].cancel();
 				} catch (e) {}
 		}
+
 		for (var i = 0, n = arr.length; i < n; ++i) {
 			var v = arr[i];
 			if (!thenable(v, resolve, reject)) {
@@ -208,9 +209,10 @@ Pending.race = function (arr) {
 			} else
 				promises.push(v);
 		}
-		if (n)
+		if (promises.length)
 			return { cancel: _cancel };
-		resolve(undefined);
+		if (!n)
+			resolve(); // nothing
 	});
 };
 
