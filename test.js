@@ -5,10 +5,10 @@ var Promise = require(__dirname+'/index.js');
 
 var promise = function (f) { return new Promise(f); };
 
-var timer = function (ms, o) {
+var timer = function (ms, o, v) {
 	return promise(function (resolve, reject) {
 		var to = setTimeout(function () {
-				resolve();
+				resolve(v);
 				to = undefined;
 			}, ms);
 		if (o && typeof o === 'object')
@@ -155,6 +155,26 @@ describe('Cancelation', function () {
 			});
 		assert(o.getTO() !== undefined, 'no timer');
 		t.cancel();
+	});
+
+});
+
+describe('Promise.resolve(...)', function () {
+
+	it('Promise.resolve(timer(10, null, 55), timer(11, null, 12))', function (done) {
+		Promise.resolve(timer(10, null, 55), timer(11, null, 12)).then(function (a, b) {
+				assert.strictEqual(55, a);
+				assert.strictEqual(12, b);
+				done();
+			});
+	});
+
+	it('Promise.resolve(timer(10, null, 55), timer(11, null, timer(1, null, 123)))', function (done) {
+		Promise.resolve(timer(10, null, 55), timer(11, null, timer(1, null, 123))).then(function (a, b) {
+				assert.strictEqual(55, a);
+				assert.strictEqual(123, b);
+				done();
+			});
 	});
 
 });

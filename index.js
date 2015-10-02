@@ -84,6 +84,10 @@ function ReedThen(op, args) { // Re(solv|ject)edThen
 var CANCEL_REASON = 'CANCEL';
 
 function execAll(arr, resolve, reject) {
+
+		if (typeof arr !== 'object' || !('length' in arr))
+			return reject(TypeError('not array'));
+
 		var refs = 0,
 		    promises = [],
 		    results = [];
@@ -106,9 +110,6 @@ function execAll(arr, resolve, reject) {
 			} else
 				results[i] = o; // not a Promise
 		};
-
-		if (typeof arr !== 'object' || !('length' in arr))
-			return reject(TypeError('not array'));
 
 		for (var i = 0, n = arr.length; i < n; ++i)
 			sub(i, arr[i]);
@@ -217,11 +218,14 @@ Pending.race = function (arr) {
 };
 
 Pending.resolve = function () {
-	return { then: ReedThen(1, arguments) };
+	var args = arguments;
+	return new Pending(function (resolve, reject) {
+		resolve.apply(null, args);
+	});
 };
 
 Pending.reject = function () {
-	return { then: ReedThen(0, arguments) };
+	return { then: ReedThen(0, arguments), cancel: function noop() {} };
 };
 
 Pending.Arguments = Arguments;
