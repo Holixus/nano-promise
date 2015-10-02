@@ -20,6 +20,38 @@ new Promise(function (resolve, reject) {
 
 ## Extensions
 
+### Promise.resolve(...)
+
+
+```js
+Promise.resolve(5, 'a')
+	.then(function (a, b) {
+		console.log(a, b);
+	});
+```
+
+Like Promise.all() but ...
+
+```js
+function timer(ms, value) {
+	return new Promise(function (resolve, reject) {
+		var to = setTimeout(function () {
+				resolve(value);
+			}, ms);
+		return { cancel: function () {
+			clearTimeout(to); // can be called in pending state one time only
+		}};
+	});
+}
+
+Promise.resolve(timer(1000, 'go'), timer(800, 'up'))
+	.then(function (a, b) {
+		console.log(a, b); // 'go', 'up'
+	});
+```
+
+
+
 ### Promise.concat(array)
 
 * array {Array} - array of Promises or values
