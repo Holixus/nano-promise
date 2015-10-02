@@ -36,3 +36,29 @@ Promies.concat([
 		console.log(a,b,c,d,e,f,g,h); // 1 2 3 4 5 6 7 8
 	});
 ```
+
+### promise.cancel()
+
+```js
+function timer(ms) {
+	return new Promise(function (resolve, reject) {
+		var to = setTimeout(function () {
+				resolve();
+				to = undefined;
+			}, ms);
+		return { cancel: function () {
+			if (to !== undefined)
+				clearTimeout(to);
+			to = undefined;
+		}};
+	});
+}
+
+timer(1000).then(function () {
+		console.log('timeout');
+	}, function (r) {
+		if (r === Promise.CANCEL_REASON)
+			console.log('cancelled');
+	}).cancel();
+
+```
