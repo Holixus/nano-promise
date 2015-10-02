@@ -42,14 +42,9 @@ Promies.concat([
 ```js
 function timer(ms) {
 	return new Promise(function (resolve, reject) {
-		var to = setTimeout(function () {
-				resolve();
-				to = undefined;
-			}, ms);
+		var to = setTimeout(resolve, ms);
 		return { cancel: function () {
-			if (to !== undefined)
-				clearTimeout(to);
-			to = undefined;
+			clearTimeout(to); // can be called in pending state one time only
 		}};
 	});
 }
