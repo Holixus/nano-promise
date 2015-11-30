@@ -178,3 +178,110 @@ describe('Promise.resolve(...)', function () {
 	});
 
 });
+
+describe('Promise#finally(...)', function () {
+
+	it('resolve', function (done) {
+		var val = 'werwrer',
+		    c = 0;
+		new Promise(function (res) {
+			res(val);
+		})
+		.finally(function () {
+			++c;
+		})
+		.then(function (r) {
+			assert.strictEqual(1, c);
+			assert.strictEqual(val, r);
+			done();
+		})
+		.catch(done);
+	});
+
+	it('reject', function (done) {
+		var val = 'werwrer',
+		    c = 0;
+		new Promise(function (res, rej) {
+			rej(val);
+		})
+		.finally(function () {
+			++c;
+		})
+		.then(function () {
+				done(Error('!'));
+			}, function (r) {
+				assert.strictEqual(1, c);
+				assert.strictEqual(val, r);
+				done();
+		})
+		.catch(done);
+	});
+
+	it('resolve later', function (done) {
+		var val = 'werwrer',
+		    c = 0;
+		timer(5).then(function () {
+			return val;
+		})
+		.finally(function () {
+			++c;
+		})
+		.then(function (r) {
+			assert.strictEqual(1, c);
+			assert.strictEqual(val, r);
+			done();
+		})
+		.catch(done);
+	});
+
+	it('reject later', function (done) {
+		var val = 'werwrer',
+		    c = 0;
+		timer(5).then(function () {
+			throw val;
+		})
+		.finally(function () {
+			++c;
+		})
+		.then(function () {
+				done(Error('!'));
+			}, function (r) {
+				assert.strictEqual(1, c);
+				assert.strictEqual(val, r);
+				done();
+		})
+		.catch(done);
+	});
+
+	it('resolved', function (done) {
+		var val = 'werwrer',
+		    c = 0;
+		Promise.resolve(val)
+		.finally(function () {
+			++c;
+		})
+		.then(function (r) {
+			assert.strictEqual(1, c);
+			assert.strictEqual(val, r);
+			done();
+		})
+		.catch(done);
+	});
+
+	it('rejected', function (done) {
+		var val = 'werwrer',
+		    c = 0;
+		Promise.reject(val)
+		.finally(function () {
+			++c;
+		})
+		.then(function () {
+				done(Error('!'));
+			}, function (r) {
+				assert.strictEqual(1, c);
+				assert.strictEqual(val, r);
+				done();
+		})
+		.catch(done);
+	});
+});

@@ -177,15 +177,16 @@ function Pending(executor) {
 }
 
 Pending.prototype = {
+	cancel: function noop() {},
 	'catch': function (reject) {
 		return this.then(0, reject);
 	},
 	finally: function (cb) {
 		return this.then(function () {
-			cb(r);
+			cb();
 			return new Arguments(arguments);
 		}, function (r) {
-			cb(r);
+			cb();
 			throw r;
 		});
 	}
@@ -235,7 +236,9 @@ Pending.resolve = function () {
 };
 
 Pending.reject = function () {
-	return { then: ReedThen(0, arguments), cancel: function noop() {} };
+	var o = Object.create(Pending.prototype);
+	o.then = ReedThen(0, arguments);
+	return o;
 };
 
 Pending.Arguments = Arguments;
