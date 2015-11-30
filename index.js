@@ -181,7 +181,13 @@ Pending.prototype = {
 		return this.then(0, reject);
 	},
 	finally: function (cb) {
-		return this.then(cb, cb);
+		return this.then(function () {
+			cb(r);
+			return new Arguments(arguments);
+		}, function (r) {
+			cb(r);
+			throw r;
+		});
 	}
 };
 
