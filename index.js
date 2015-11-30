@@ -160,6 +160,7 @@ function Pending(executor) {
 		};
 	this.cancel = function () {
 		_reject(CANCEL_REASON);
+		return this;
 	};
 
 	if (typeof executor === 'function')
