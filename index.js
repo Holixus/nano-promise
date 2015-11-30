@@ -178,6 +178,9 @@ function Pending(executor) {
 Pending.prototype = {
 	'catch': function (reject) {
 		return this.then(0, reject);
+	},
+	finally: function (cb) {
+		return this.then(cb, cb);
 	}
 };
 

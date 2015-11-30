@@ -1,6 +1,6 @@
 {
   "name": "nanopromise",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Promise/A+ realization",
   "main": "index.js",
   "devDependencies": {
@@ -24,6 +24,12 @@
     "type": "git",
     "url": "https://github.com/Holixus/nanopromise.git"
   },
+  "maintainers": [
+    {
+      "name": "holixus",
+      "email": "true@holix.ru"
+    }
+  ],
   "author": "Vladimir Antonov (aka Holixus)",
   "homepage": "https://github.com/Holixus/nanopromise",
   "bugs": {
