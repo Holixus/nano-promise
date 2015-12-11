@@ -52,20 +52,20 @@ function thenable(v, res, rej) {
 		try {
 			var _then = v.then;
 		} catch (e) {
-			return rej(e), 1;
+			return rej && rej(e), 1;
 		}
 		if (typeof _then === 'function') {
 			var f = 0;
 			try {
 				_then.call(v, function () {
-						if (!f++)
+						if (!f++ && res)
 							res.apply(undefined, arguments);
 					}, function () {
-						if (!f++)
+						if (!f++ && rej)
 							rej.apply(undefined, arguments);
 					});
 			} catch (e) {
-				if (!f++)
+				if (!f++ && rej)
 					rej(e);
 			}
 			return 1;
@@ -217,10 +217,22 @@ Pending.race = function (arr) {
 			var v = arr[i];
 			if (!thenable(v, resolve, reject)) {
 				resolve(arr[i]);
-				return;
-			} else
+
+				for (; i < n; ++i) {
+					var v = arr[i];
+					if (thenable(v))
+						v.cancel();
+				}
+				return _cancel();
+			} else {
 				promises.push(v);
+				v.then(_cancel, function (r) {
+					if (r !== CANCEL_REASON)
+						_cancel();
+				});
+			}
 		}
+
 		if (promises.length)
 			return { cancel: _cancel };
 		if (!n)
