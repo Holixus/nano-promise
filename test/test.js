@@ -1,7 +1,7 @@
 var assert = require("assert"),
     util = require('util')
 
-var Promise = require(__dirname+'/index.js');
+var Promise = require(__dirname+'/../index.js');
 
 var promise = function (f) { return new Promise(f); };
 
@@ -30,6 +30,25 @@ var timerThenResolve = function (ms, val) {
 var timerThenReject = function (ms, val) {
 	return timer(ms).then(function () { throw val; });
 };
+
+describe("Promises/A+ Tests", function () {
+	require("promises-aplus-tests").mocha({
+		resolved: function (v) {
+			return Promise.resolve(v);
+		},
+		rejected: function (r) {
+			return Promise.reject(r);
+		},
+		deferred: function () {
+			var d = {};
+			d.promise = new Promise(function (_resolve, _reject) {
+						d.resolve = _resolve;
+						d.reject = _reject;
+					})
+			return d;
+		}
+	});
+});
 
 describe('Promise with multi arguments resolving', function () {
 

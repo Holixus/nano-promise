@@ -1,20 +1,22 @@
 {
   "name": "nanopromise",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Promise/A+ realization",
   "main": "index.js",
   "devDependencies": {
     "promises-aplus-tests": "*",
-    "mocha": "~1.21.4",
     "grunt": ">= 0.4.5",
     "gzip-js": ">= 0.3.1",
     "grunt-contrib-uglify": ">= 0.2.2",
     "grunt-compare-size": ">= 0.0.0",
-    "colors": ">= 0.6.1"
+    "colors": ">= 0.6.1",
+    "mocha": "2",
+    "istanbul": "0"
   },
   "scripts": {
-    "test": "promises-aplus-tests test_adapter.js",
-    "test2": "./node_modules/mocha/bin/mocha test.js",
+    "test": "mocha --reporter spec",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot",
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter dot",
     "build": "grunt"
   },
   "keywords": [
