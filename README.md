@@ -107,10 +107,10 @@ timer(1000).then(function () {
 [github-tag]: http://img.shields.io/github/tag/Holixus/nanopromise.svg?style=flat-square
 [github-url]: https://github.com/Holixus/nanopromise/tags
 
-[travis-image]: https://travis-ci.org/Holixus/nanopromise.svg?branch=master
+[travis-image]: https://travis-ci.org/Holixus/nanopromise.svg?branch=cancellable
 [travis-url]: https://travis-ci.org/Holixus/nanopromise
 
-[coveralls-image]: https://img.shields.io/coveralls/Holixus/nanopromise.svg?style=flat-square
+[coveralls-image]: https://img.shields.io/coveralls/Holixus/nanopromise.svg?style=flat-square&branch=cancellable
 [coveralls-url]: https://coveralls.io/r/Holixus/nanopromise
 
 [david-image]: http://img.shields.io/david/Holixus/nanopromise.svg?style=flat-square
