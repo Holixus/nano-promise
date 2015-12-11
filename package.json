@@ -32,7 +32,7 @@
       "email": "true@holix.ru"
     }
   ],
-  "author": "Vladimir Antonov (aka Holixus)",
+  "author": "Vladimir Antonov (aka Holixus) <me@holix.ru>",
   "homepage": "https://github.com/Holixus/nanopromise",
   "bugs": {
     "url": "https://github.com/Holixus/nanopromise/issues"
