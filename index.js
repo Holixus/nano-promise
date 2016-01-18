@@ -1,5 +1,11 @@
 module.exports = (function (onIdle, queue) {"use strict";
 
+function atoa() {
+    for (var a = [], as = arguments, i = 0, n = as.length; i < n; ++i)
+        a.push(as[i]);
+    return a;
+}
+
 function Arguments(a) {
 	if (a)
 		for (var n = this.length = a.length, i = 0; i < n; ++i)
@@ -101,7 +107,7 @@ function execAll(arr, resolve, reject) {
 
 		function sub(i, o) {
 			if (thenable(o, function (v) {
-						results[i] = arguments.length > 1 ? new Arguments(arguments): v;
+						results[i] = arguments.length > 1 ? new Arguments(atoa.apply(null, arguments)): v;
 						if (!--refs)
 							resolve(results);
 					}, reject)) {
@@ -138,18 +144,19 @@ function Pending(executor) {
 	    		if (r === CANCEL_REASON)
 	    			if (cancel)
 	    				cancel();
-	    		_done(arguments, 0);
+	    		_done(atoa.apply(null, arguments), 0);
 	    	},
 	    _resolve = function (v) {
 	    		if (v === self)
 	    			throw TypeError();
+	    		var args = atoa.apply(null, arguments);
 	    		if (arguments.length > 1)
-	    			execAll(arguments, function (arr) {
+	    			execAll(args, function (arr) {
 	    				_done(arr, 1);
 	    			}, _reject);
 	    		else
 	    			if (!thenable(v, _resolve, _reject))
-	    				_done(arguments, 1);
+	    				_done(args, 1);
 	    	};
 
 	this.then = function (res, rej) {
@@ -184,7 +191,7 @@ Pending.prototype = {
 	finally: function (cb) {
 		return this.then(function () {
 			cb();
-			return new Arguments(arguments);
+			return new Arguments(atoa.apply(null, arguments));
 		}, function (r) {
 			cb();
 			throw r;
@@ -241,7 +248,7 @@ Pending.race = function (arr) {
 };
 
 Pending.resolve = function () {
-	var args = arguments;
+	var args = atoa.apply(null, arguments);
 	return new Pending(function (resolve, reject) {
 		resolve.apply(null, args);
 	});
@@ -249,7 +256,7 @@ Pending.resolve = function () {
 
 Pending.reject = function () {
 	var o = Object.create(Pending.prototype);
-	o.then = ReedThen(0, arguments);
+	o.then = ReedThen(0, atoa.apply(null, arguments));
 	return o;
 };
 

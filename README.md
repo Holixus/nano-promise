@@ -1,11 +1,11 @@
-# nanopromise
-
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Dependency Status][david-image]][david-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
+
+# nanopromise
 
 A small Promise/A++ node module
 
@@ -101,23 +101,23 @@ timer(1000).then(function () {
 [gitter-image]: https://badges.gitter.im/Holixus/nanopromise.png
 [gitter-url]: https://gitter.im/Holixus/nanopromise
 
-[npm-image]: https://img.shields.io/npm/v/nanopromise.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/nanopromise.svg
 [npm-url]: https://npmjs.org/package/nanopromise
 
-[github-tag]: http://img.shields.io/github/tag/Holixus/nanopromise.svg?style=flat-square
+[github-tag]: http://img.shields.io/github/tag/Holixus/nanopromise.svg
 [github-url]: https://github.com/Holixus/nanopromise/tags
 
 [travis-image]: https://travis-ci.org/Holixus/nanopromise.svg?branch=cancellable
 [travis-url]: https://travis-ci.org/Holixus/nanopromise
 
-[coveralls-image]: https://img.shields.io/coveralls/Holixus/nanopromise.svg?style=flat-square&branch=cancellable
+[coveralls-image]: https://img.shields.io/coveralls/Holixus/nanopromise.svg?branch=cancellable
 [coveralls-url]: https://coveralls.io/r/Holixus/nanopromise
 
-[david-image]: http://img.shields.io/david/Holixus/nanopromise.svg?style=flat-square
+[david-image]: http://img.shields.io/david/Holixus/nanopromise.svg
 [david-url]: https://david-dm.org/Holixus/nanopromise
 
-[license-image]: http://img.shields.io/npm/l/nanopromise.svg?style=flat-square
+[license-image]: http://img.shields.io/npm/l/nanopromise.svg
 [license-url]: LICENSE
 
-[downloads-image]: http://img.shields.io/npm/dm/nanopromise.svg?style=flat-square
+[downloads-image]: http://img.shields.io/npm/dm/nanopromise.svg
 [downloads-url]: https://npmjs.org/package/nanopromise
