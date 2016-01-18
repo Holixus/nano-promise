@@ -99,7 +99,7 @@ timer(1000).then(function () {
 
 ```
 
-[gitter-image]: https://badges.gitter.im/Holixus/nanopromise.png
+[gitter-image]: https://badges.gitter.im/Holixus/nanopromise.svg
 [gitter-url]: https://gitter.im/Holixus/nanopromise
 
 [npm-image]: https://img.shields.io/npm/v/nanopromise.svg
