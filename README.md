@@ -1,4 +1,4 @@
-[![Gitter][gitter-image]][gitter-url]
+[![Join the chat][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
@@ -7,8 +7,6 @@
 [![Downloads][downloads-image]][downloads-url]
 
 # nanopromise
-
-[![Join the chat at https://gitter.im/Holixus/nanopromise](https://badges.gitter.im/Holixus/nanopromise.svg)](https://gitter.im/Holixus/nanopromise?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A small Promise/A++ node module
 
@@ -102,7 +100,7 @@ timer(1000).then(function () {
 ```
 
 [gitter-image]: https://badges.gitter.im/Holixus/nanopromise.svg
-[gitter-url]: https://gitter.im/Holixus/nanopromise
+[gitter-url]: https://gitter.im/Holixus/nanopromise?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 [npm-image]: https://img.shields.io/npm/v/nanopromise.svg
 [npm-url]: https://npmjs.org/package/nanopromise
