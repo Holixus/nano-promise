@@ -8,6 +8,8 @@
 
 # nanopromise
 
+[![Join the chat at https://gitter.im/Holixus/nanopromise](https://badges.gitter.im/Holixus/nanopromise.svg)](https://gitter.im/Holixus/nanopromise?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A small Promise/A++ node module
 
 ## Usage
