@@ -1,5 +1,5 @@
 {
-  "name": "nanopromise",
+  "name": "nano-promise",
   "version": "1.1.6",
   "description": "A small Promise/A++ node module",
   "main": "index.js",
@@ -20,11 +20,11 @@
     "build": "grunt"
   },
   "keywords": [
-    "promise", "promise/a+"
+    "promise", "promise/a+", "promises-aplus"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Holixus/nanopromise.git"
+    "url": "https://github.com/Holixus/nano-promise.git"
   },
   "maintainers": [
     {
@@ -33,9 +33,9 @@
     }
   ],
   "author": "Vladimir Antonov (aka Holixus) <me@holix.ru>",
-  "homepage": "https://github.com/Holixus/nanopromise",
+  "homepage": "https://github.com/Holixus/nano-promise",
   "bugs": {
-    "url": "https://github.com/Holixus/nanopromise/issues"
+    "url": "https://github.com/Holixus/nano-promise/issues"
   },
   "license": "MIT"
 }

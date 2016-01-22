@@ -11,7 +11,7 @@
          title="Promises/A+ 1.1 compliant" align="right" />
 </a>
 
-# nanopromise
+# nano-promise
 
 A small Promise/A++ node module.
 
@@ -20,7 +20,7 @@ A small Promise/A++ node module.
 
 
 ```js
-var Promise = require('nanopromise');
+var Promise = require('nano-promise');
 
 new Promise(function (resolve, reject) {
 	resolve(1, 2, 3, 4); // you can pass several arguments
@@ -104,26 +104,26 @@ timer(1000).then(function () {
 
 ```
 
-[gitter-image]: https://badges.gitter.im/Holixus/nanopromise.svg
-[gitter-url]: https://gitter.im/Holixus/nanopromise?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+[gitter-image]: https://badges.gitter.im/Holixus/nano-promise.svg
+[gitter-url]: https://gitter.im/Holixus/nano-promise?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
-[npm-image]: https://img.shields.io/npm/v/nanopromise.svg
-[npm-url]: https://npmjs.org/package/nanopromise
+[npm-image]: https://img.shields.io/npm/v/nano-promise.svg
+[npm-url]: https://npmjs.org/package/nano-promise
 
-[github-tag]: http://img.shields.io/github/tag/Holixus/nanopromise.svg
-[github-url]: https://github.com/Holixus/nanopromise/tags
+[github-tag]: http://img.shields.io/github/tag/Holixus/nano-promise.svg
+[github-url]: https://github.com/Holixus/nano-promise/tags
 
-[travis-image]: https://travis-ci.org/Holixus/nanopromise.svg?branch=cancellable
-[travis-url]: https://travis-ci.org/Holixus/nanopromise
+[travis-image]: https://travis-ci.org/Holixus/nano-promise.svg?branch=cancellable
+[travis-url]: https://travis-ci.org/Holixus/nano-promise
 
-[coveralls-image]: https://img.shields.io/coveralls/Holixus/nanopromise.svg?branch=cancellable
-[coveralls-url]: https://coveralls.io/r/Holixus/nanopromise
+[coveralls-image]: https://img.shields.io/coveralls/Holixus/nano-promise.svg?branch=cancellable
+[coveralls-url]: https://coveralls.io/r/Holixus/nano-promise
 
-[david-image]: http://img.shields.io/david/Holixus/nanopromise.svg
-[david-url]: https://david-dm.org/Holixus/nanopromise
+[david-image]: http://img.shields.io/david/Holixus/nano-promise.svg
+[david-url]: https://david-dm.org/Holixus/nano-promise
 
-[license-image]: http://img.shields.io/npm/l/nanopromise.svg
+[license-image]: http://img.shields.io/npm/l/nano-promise.svg
 [license-url]: LICENSE
 
-[downloads-image]: http://img.shields.io/npm/dm/nanopromise.svg
-[downloads-url]: https://npmjs.org/package/nanopromise
+[downloads-image]: http://img.shields.io/npm/dm/nano-promise.svg
+[downloads-url]: https://npmjs.org/package/nano-promise

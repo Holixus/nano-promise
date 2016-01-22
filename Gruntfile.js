@@ -3,7 +3,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     compare_size: {
-      files: [ "index.js", "dist/nanopromise.min.js" ],
+      files: [ "index.js", "dist/nano-promise.min.js" ],
       options: {
         compress: {
           gz: function( contents ) {
@@ -20,7 +20,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          './dist/nanopromise.min.js': ['./index.js']
+          './dist/nano-promise.min.js': ['./index.js']
         }
       }
     },
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
           mode: 'gzip'
         },
         files: [
-          {expand: true, src: 'dist/nanopromise.min.js', dest: 'dist/', ext: '.gz.js'}
+          {expand: true, src: 'dist/nano-promise.min.js', dest: 'dist/', ext: '.gz.js'}
         ]
       }
     }
