@@ -6,9 +6,14 @@
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
+<a href="https://promisesaplus.com/">
+    <img src="https://promisesaplus.com/assets/logo-small.png" alt="Promises/A+ logo"
+         title="Promises/A+ 1.0 compliant" align="right" />
+</a>
+
 # nanopromise
 
-A small Promise/A++ node module
+A small Promise/A++ node module.
 
 ## Usage
 
