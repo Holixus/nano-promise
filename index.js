@@ -1,30 +1,16 @@
 module.exports = (function (onIdle, queue) {"use strict";
 
+function Arguments() {
+	Array.call(this);
+	this.push.apply(this, arguments);
+}
+
+Arguments.prototype = Object.create(Array.prototype);
+
 function atoa() {
-    for (var a = [], as = arguments, i = 0, n = as.length; i < n; ++i)
-        a.push(as[i]);
-    return a;
-}
-
-function Arguments(a) {
-	if (a)
-		for (var n = this.length = a.length, i = 0; i < n; ++i)
-			this[i] = a[i];
-	else
-		this.length = 0;
-}
-
-Arguments.prototype = {
-	push: function (v) {
-		this[this.length++] = v;
-	},
-	concat: function (e) {
-		if (e instanceof Arguments || e instanceof Array)
-			for (var j = 0, m = e.length; j < m; ++j)
-				this.push(e[j]);
-		else
-			this.push(e);
-	}
+	var a = new Arguments();
+	a.push.apply(a, arguments);
+	return a;
 };
 
 function sched(defer, op, args) { // [pending.resolve, pending.reject, res, rej], op, arguments
@@ -107,7 +93,7 @@ function execAll(arr, resolve, reject) {
 
 		function sub(i, o) {
 			if (thenable(o, function (v) {
-						results[i] = arguments.length > 1 ? new Arguments(atoa.apply(null, arguments)): v;
+						results[i] = arguments.length > 1 ? atoa.apply(null, arguments): v;
 						if (!--refs)
 							resolve(results);
 					}, reject)) {
@@ -150,7 +136,7 @@ function Pending(executor) {
 	    		if (v === self)
 	    			throw TypeError();
 	    		var args = atoa.apply(null, arguments);
-	    		if (arguments.length > 1)
+	    		if (args.length > 1)
 	    			execAll(args, function (arr) {
 	    				_done(arr, 1);
 	    			}, _reject);
@@ -184,14 +170,14 @@ function Pending(executor) {
 }
 
 Pending.prototype = {
-	cancel: function noop() {},
+	cancel: undefined,
 	'catch': function (reject) {
 		return this.then(0, reject);
 	},
 	finally: function (cb) {
 		return this.then(function () {
 			cb();
-			return new Arguments(atoa.apply(null, arguments));
+			return atoa.apply(null, arguments);
 		}, function (r) {
 			cb();
 			throw r;
@@ -242,8 +228,7 @@ Pending.race = function (arr) {
 
 		if (promises.length)
 			return { cancel: _cancel };
-		if (!n)
-			resolve(); // nothing
+		resolve(); // nothing
 	});
 };
 
@@ -264,11 +249,16 @@ Pending.Arguments = Arguments;
 Pending.CANCEL_REASON = CANCEL_REASON;
 
 Pending.concat = function (arr) {
-	return Pending.all(arr).then(function (results) {
-			var out = new Arguments;
-			for (var i = 0, n = results.length; i < n; ++i)
-				out.concat(results[i]);
-			return out;
+	return Pending.all(arr).then(function (arr) {
+			var r = new Arguments();
+			for (var i = 0, n = arr.length; i < n; ++i) {
+				var a = arr[i];
+				if (a instanceof Arguments || a instanceof Array)
+					r.push.apply(r, a)/*, console.log(a)*/;
+				else
+					r.push(a);
+			}
+			return r;
 		});
 };
 

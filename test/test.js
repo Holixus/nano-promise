@@ -6,9 +6,10 @@ var Promise = require(__dirname+'/../index.js');
 var promise = function (f) { return new Promise(f); };
 
 var timer = function (ms, o, v) {
+	var v = Array.prototype.splice.call(arguments, 2);
 	return promise(function (resolve, reject) {
 		var to = setTimeout(function () {
-				resolve(v);
+				resolve.apply(null, v);
 				to = undefined;
 			}, ms);
 		if (o && typeof o === 'object')
@@ -125,13 +126,155 @@ describe('Promise.all(x).then(...)', function () {
 			}).catch(done);
 	});
 	it('all([promise,promise,promise]).then()', function (done) {
-		Promise.all([timerThenResolve(5, 1),Promise.resolve(2),timerThenResolve(8,3)])
+		Promise.all([timerThenResolve(5, 1),Promise.resolve(2,3,4),timerThenResolve(8,3)])
 			.then(function (a) {
-				assert.deepStrictEqual([1,2,3], a);
+				assert.deepStrictEqual([1, new Promise.Arguments(2,3,4),3], a);
 				done();
 			}).catch(done);
 	});
 	it('all([promise,reject,promise]).then()', function (done) {
+		Promise.all([timerThenResolve(5, 1),timerThenReject(10,'ooo'),timerThenResolve(8,3)])
+			.catch(function (a) {
+				assert.deepStrictEqual('ooo', a);
+				done();
+			})
+	});
+	it('all([promise,promise,promise]).then().cancel()', function (done) {
+		Promise.all([timerThenResolve(5, 1),Promise.resolve(2),timerThenResolve(8,3)])
+			.then(function () {
+				done(Error('not cancelled'));
+			}, function (a) {
+				assert.strictEqual(a, Promise.CANCEL_REASON);
+				done();
+			}).catch(function (e) {
+				assert.strictEqual(a, Promise.CANCEL_REASON);
+				done();
+			}).cancel();
+	});
+});
+
+
+describe('Promise.concat(x).then(...)', function () {
+
+	it('concat().then()', function (done) {
+		Promise.concat().catch(function (r) {
+				done()
+			});
+	});
+	it('concat([]).then()', function (done) {
+		Promise.concat([])
+			.then(function (a) {
+				assert.strictEqual(a, undefined);
+				done();
+			}).catch(done);
+	});
+	it('concat([1,2,3]).then()', function (done) {
+		Promise.concat([1,2,3])
+			.then(function (a, b, c) {
+				assert.strictEqual(a, 1);
+				assert.strictEqual(b, 2);
+				assert.strictEqual(c, 3);
+				done();
+			}).catch(done);
+	});
+	it('concat([1,promise,3]).then()', function (done) {
+		Promise.concat([1,Promise.resolve(2),3])
+			.then(function (a, b, c) {
+				assert.strictEqual(a, 1);
+				assert.strictEqual(b, 2);
+				assert.strictEqual(c, 3);
+				done();
+			}).catch(done);
+	});
+	it('concat([promise,promise,promise]).then()', function (done) {
+		Promise.concat([timerThenResolve(5, 1),Promise.resolve(2,3,4),timerThenResolve(8,5)])
+			.then(function (a, b, c, d, e) {
+				assert.strictEqual(a, 1);
+				assert.strictEqual(b, 2);
+				assert.strictEqual(c, 3);
+				assert.strictEqual(d, 4);
+				assert.strictEqual(e, 5);
+				done();
+			}).catch(done);
+	});
+	it('concat([promise,reject,promise]).then()', function (done) {
+		Promise.concat([timerThenResolve(5, 1),timerThenReject(10,'ooo'),timerThenResolve(8,3)])
+			.catch(function (a) {
+				assert.deepStrictEqual('ooo', a);
+				done();
+			})
+	});
+	it('concat([promise,promise,promise]).then().cancel()', function (done) {
+		Promise.concat([timerThenResolve(5, 1),Promise.resolve(2),timerThenResolve(8,3)])
+			.then(function () {
+				done(Error('not cancelled'));
+			}, function (a) {
+				assert.strictEqual(a, Promise.CANCEL_REASON);
+				done();
+			}).catch(function (e) {
+				assert.strictEqual(a, Promise.CANCEL_REASON);
+				done();
+			}).cancel();
+	});
+});
+
+
+describe('Promise.race(x).then(...)', function () {
+
+	it('race().then()', function (done) {
+		Promise.race().catch(function (r) {
+				done()
+			});
+	});
+	it('race([]).then()', function (done) {
+		Promise.race([])
+			.then(function (a) {
+				assert.strictEqual(undefined, a, 'not undefined');
+				done();
+			}).catch(done);
+	});
+	it('race([1,2,3]).then()', function (done) {
+		Promise.race([1,2,3])
+			.then(function (a) {
+				assert.deepStrictEqual(1, a);
+				done();
+			}).catch(done);
+	});
+	it('race([1,promise,3]).then()', function (done) {
+		Promise.race([1,Promise.resolve(2),3])
+			.then(function (a) {
+				assert.deepStrictEqual(1, a);
+				done();
+			}).catch(done);
+	});
+	it('race([promise,promise,promise]).then()', function (done) {
+		Promise.race([timerThenResolve(5, 1),Promise.resolve(2),timerThenResolve(8,3)])
+			.then(function (a) {
+				assert.deepStrictEqual(2, a);
+				done();
+			}).catch(done);
+	});
+	it('race([promise,promise,promise]).then() with promised reject', function (done) {
+		Promise.race([timerThenResolve(45, 1),timerThenReject(8,3),timerThenResolve(34,3)])
+			.then(function (a) {
+				done(Error('resolved!'));
+			}, function (e) {
+				assert.strictEqual(e, 3);
+				done();
+			});
+	});
+	it('race([promise,promise,promise]).then().cancel()', function (done) {
+		Promise.race([timerThenResolve(45, 1),Promise.resolve(2),timerThenResolve(38,3)])
+			.then(function () {
+				done(Error('wasn`t cancelled'));
+			}, function (a) {
+				assert.strictEqual(a, Promise.CANCEL_REASON);
+				done();
+			}).catch(function (rc) {
+				assert.strictEqual(a, Promise.CANCEL_REASON);
+			}).cancel();
+	});
+	it('race([promise,reject,promise]).then()', function (done) {
 		Promise.all([timerThenResolve(5, 1),timerThenReject(10,'ooo'),timerThenResolve(8,3)])
 			.catch(function (a) {
 				assert.deepStrictEqual('ooo', a);
@@ -174,6 +317,47 @@ describe('Cancelation', function () {
 			});
 		assert(o.getTO() !== undefined, 'no timer');
 		t.cancel();
+	});
+
+});
+
+describe('new Promise(...)', function () {
+
+	it('without executor', function (done) {
+		new Promise().then(function () {
+			done(Error('solved!'));
+		}, function (e) {
+			done(Error('rejected'));
+		});
+		timer(10).then(function () {
+			done();
+		});
+	});
+
+	it('then cancel isn`t function', function (done) {
+		new Promise(function () {
+			return { cancel: 5 };
+		}).then(function () {
+			done(Error('solved!'));
+		}, function (e) {
+			done(Error('rejected'));
+		});
+		timer(10).then(function () {
+			done();
+		});
+	});
+
+	it('with throwing executor', function (done) {
+		new Promise(function () {
+			throw Error('ok');
+		}).then(function () {
+			done(Error('solved!'));
+		}, function (e) {
+			done();
+		});
+		timer(50).then(function () {
+			done(Error('in pending!'));
+		});
 	});
 
 });
