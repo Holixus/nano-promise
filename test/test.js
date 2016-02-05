@@ -32,6 +32,7 @@ var timerThenReject = function (ms, val) {
 	return timer(ms).then(function () { throw val; });
 };
 
+
 describe("Promises/A+ Tests", function () {
 	require("promises-aplus-tests").mocha({
 		resolved: function (v) {
@@ -50,6 +51,7 @@ describe("Promises/A+ Tests", function () {
 		}
 	});
 });
+
 
 describe('Promise with multi arguments resolving', function () {
 
@@ -286,6 +288,32 @@ describe('Promise.race(x).then(...)', function () {
 
 describe('Cancelation', function () {
 
+	it('executor.cancel() call after resolve check', function (done) {
+
+		var d = 0;
+		var t = promise(function (resolve, reject) {
+			var to = setTimeout(function () {
+					resolve(11);
+					d = 1;
+					to = -1;
+				}, 10);
+			return { cancel: function () {
+				assert.strictNotEqual(to,  -1, 'cancel resolved timer!!');
+				assert.strictEqual(d, 1);
+				clearTimeout(to);
+			}};
+		});
+
+		timer(20).then(function () {
+			assert.strictEqual(d, 1);
+			t.cancel();
+		});
+
+		timer(30).then(done);
+	});
+
+
+
 	it('timer(10).then(done)', function (done) {
 		var o = {};
 		timer(10, o).then(function () {
@@ -319,6 +347,61 @@ describe('Cancelation', function () {
 		t.cancel();
 	});
 
+	it('timer(10, 10).then(timer); cancel() in 15ms', function (done) {
+		var seq = timer(10).then(function () {
+				return timer(40).then(function () {
+						done(Error('not cancelled'));
+					}, function (r) {
+						assert.strictEqual(r, Promise.CANCEL_REASON, 'not a cancel reason');
+						done();
+					});
+			}, function (r) {
+				done(r);
+			});
+		timer(30).then(function () {
+			seq.cancel();
+		});
+	});
+
+	it('timer(10).then(timer(11).then(timer(12)); cancel() in 15ms', function (done) {
+		var check = '', ccheck = '';
+		var s = timer(10).then(function () {
+			check += 'a';
+			return timer(11).then(function () {
+				check += 'b';
+				return timer(12).then(function () {
+					check += 'c';
+					done(Error('not cancelled'));
+				}, function (e) {
+					assert.strictEqual(e, Promise.CANCEL_REASON);
+					ccheck += 'C';
+					throw e;
+				});
+			}, function (e) {
+				assert.strictEqual(e, Promise.CANCEL_REASON);
+				ccheck += 'B';
+				throw e;
+			});
+		}, function (e) {
+			assert.strictEqual(e, Promise.CANCEL_REASON);
+			ccheck += 'A';
+			throw e;
+		}).catch(function (e) {
+			if (e !== Promise.CANCEL_REASON)
+				done(e);
+		});
+		timer(15).then(function () {
+			s.cancel();
+		}).catch(done);
+		timer(17).then(function () {
+			assert.strictEqual(check, 'a');
+		}).catch(done);
+		timer(35).then(function () {
+			assert.strictEqual(check, 'a');
+			assert.strictEqual(ccheck, 'B');
+			done();
+		}).catch(done);
+	});
 });
 
 describe('new Promise(...)', function () {

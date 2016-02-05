@@ -116,13 +116,14 @@ function Pending(executor) {
 	var self = this,
 	    defers = [],
 	    cancel,
+	    is_reed = 0,
 	    _done = function (args, op) {
+	    		++is_reed;
 	    		for (var i = 0; i < defers.length; ++i)
 	    			sched(defers[i], op, args);
 	    		self.then = ReedThen(op, args);
 	    		defers = 0;
 	    	},
-	    is_reed = 0,
 	    _reject = function (r) {
 	    		if (is_reed)
 	    			return;
@@ -136,12 +137,18 @@ function Pending(executor) {
 	    		if (v === self)
 	    			throw TypeError();
 	    		var args = atoa.apply(null, arguments);
-	    		if (args.length > 1)
-	    			execAll(args, function (arr) {
+	    		if (args.length > 1) {
+	    			var o = execAll(args, function (arr) {
 	    				_done(arr, 1);
 	    			}, _reject);
-	    		else
-	    			if (!thenable(v, _resolve, _reject))
+	    			if (o)
+	    				cancel = o.cancel;
+	    		} else
+	    			if (thenable(v, _resolve, _reject)) {
+	    				var vcancel = v.cancel;
+	    				if (typeof vcancel === 'function')
+	    					cancel = vcancel;
+	    			} else
 	    				_done(args, 1);
 	    	};
 
