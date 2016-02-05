@@ -1,3 +1,5 @@
+var DO_APLUS_KIT_TESTS = 1;
+
 var assert = require("assert"),
     util = require('util')
 
@@ -22,7 +24,15 @@ var timer = function (ms, o, v) {
 			to = undefined;
 		}};
 	});
-}
+};
+
+var then_timer = function (ms, v) {
+	return promise(function (res, rej) {
+		var to = setTimeout(function () {
+			res(v);
+		}, ms);
+	});
+};
 
 var timerThenResolve = function (ms, val) {
 	return timer(ms).then(function () { return val; });
@@ -32,7 +42,7 @@ var timerThenReject = function (ms, val) {
 	return timer(ms).then(function () { throw val; });
 };
 
-
+if (DO_APLUS_KIT_TESTS)
 describe("Promises/A+ Tests", function () {
 	require("promises-aplus-tests").mocha({
 		resolved: function (v) {
@@ -298,7 +308,7 @@ describe('Cancelation', function () {
 					to = -1;
 				}, 10);
 			return { cancel: function () {
-				assert.strictNotEqual(to,  -1, 'cancel resolved timer!!');
+				assert.notStrictEqual(to,  -1, 'cancel resolved timer!!');
 				assert.strictEqual(d, 1);
 				clearTimeout(to);
 			}};
@@ -321,6 +331,28 @@ describe('Cancelation', function () {
 				done();
 			});
 		assert(o.getTO() !== undefined, 'no timer');
+	});
+
+
+	it('timer(10).then(done).cancel()', function (done) {
+		var o = 'A', oo = 'B';
+		var p = timer(4, undefined, o).then(function (v) {
+			assert.strictEqual(v, o);
+			return then_timer(10, oo);
+		}).then(function (v) {
+			assert.strictEqual(v, oo);
+			done();
+		}, function (e) {
+			assert.notStrictEqual(e, Promise.CANCEL_REASON);
+			throw e;
+		}).catch(function (e) {
+			assert.strictEqual(e, Promise.CANCEL_REASON);
+			done();
+		});
+
+		timer(8).then(function () {
+			p.cancel();
+		});
 	});
 
 	it('timer(10).cancel().catch()', function (done) {
