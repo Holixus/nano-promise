@@ -603,3 +603,26 @@ describe('Promise#finally(...)', function () {
 		.catch(done);
 	});
 });
+
+describe('Promise#spread(...)', function () {
+
+	it('array', function (done) {
+		Promise.resolve([1,2,3]).spread(function (a, b, c) {
+			assert.strictEqual(1, a);
+			assert.strictEqual(2, b);
+			assert.strictEqual(3, c);
+			done();
+		}, done);
+	});
+
+	it('not array', function (done) {
+		Promise.resolve(1,2,3).spread(function (a, b, c) {
+			assert.strictEqual(1, a);
+			assert.strictEqual(2, b);
+			assert.strictEqual(3, c);
+			done();
+		}, done);
+	});
+
+});
+

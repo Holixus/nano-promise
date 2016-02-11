@@ -1,4 +1,5 @@
-module.exports = (function (onIdle, queue) {"use strict";
+module.exports = (function (onIdle) {"use strict";
+var queue = [];
 
 function Arguments() {
 	Array.call(this);
@@ -189,6 +190,11 @@ Pending.prototype = {
 			cb();
 			throw r;
 		});
+	},
+	spread: function (res, rej) {
+		return this.then(function (a) {
+			return res.apply(null, a instanceof Array ? a : arguments);
+		}, rej);
 	}
 };
 
@@ -270,4 +276,4 @@ Pending.concat = function (arr) {
 };
 
 return Pending; // constructor of Promise in pending state
-})(process.nextTick, []);
+})(process.nextTick);
