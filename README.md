@@ -107,7 +107,7 @@ timer(1000).then(function () {
 [gitter-image]: https://badges.gitter.im/Holixus/nano-promise.svg
 [gitter-url]: https://gitter.im/Holixus/nano-promise?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
-[npm-image]: https://img.shields.io/npm/v/nano-promise.svg
+[npm-image]: https://badge.fury.io/js/nano-promise.svg
 [npm-url]: https://npmjs.org/package/nano-promise
 
 [github-tag]: http://img.shields.io/github/tag/Holixus/nano-promise.svg
@@ -116,10 +116,10 @@ timer(1000).then(function () {
 [travis-image]: https://travis-ci.org/Holixus/nano-promise.svg?branch=cancellable
 [travis-url]: https://travis-ci.org/Holixus/nano-promise
 
-[coveralls-image]: https://img.shields.io/coveralls/Holixus/nano-promise.svg?branch=cancellable
+[coveralls-image]: https://coveralls.io/repos/github/Holixus/nano-promise/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/r/Holixus/nano-promise
 
-[david-image]: http://img.shields.io/david/Holixus/nano-promise.svg
+[david-image]: http://david-dm.org/Holixus/nano-promise.svg
 [david-url]: https://david-dm.org/Holixus/nano-promise
 
 [license-image]: http://img.shields.io/npm/l/nano-promise.svg
