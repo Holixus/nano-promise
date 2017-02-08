@@ -116,7 +116,7 @@ timer(1000).then(function () {
 [travis-image]: https://travis-ci.org/Holixus/nano-promise.svg?branch=cancellable
 [travis-url]: https://travis-ci.org/Holixus/nano-promise
 
-[coveralls-image]: https://coveralls.io/repos/github/Holixus/nano-promise/badge.svg?branch=master
+[coveralls-image]: https://coveralls.io/repos/github/Holixus/nano-promise/badge.svg?branch=cancellable
 [coveralls-url]: https://coveralls.io/r/Holixus/nano-promise
 
 [david-image]: http://david-dm.org/Holixus/nano-promise.svg
